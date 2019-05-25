@@ -142,6 +142,8 @@
 #define __NR_clear 71
 #define __NR_change_user_layout 72
 
+#define __NR_keygen 73
+
 #define _syscall0(type,name) \
 type name(void) \
 { \
@@ -266,6 +268,7 @@ int getdents64(unsigned int fd, struct dirent64 *dirp, unsigned int count);
 /* OS2019 */
 int videowrite(const char *buffer, int len, struct videowrite_args *args);
 int clear(void);
+int keygen(int length,const char *buffer);
 
 #define KEY_LAYOUT 0
 #define SHIFT_LAYOUT 1

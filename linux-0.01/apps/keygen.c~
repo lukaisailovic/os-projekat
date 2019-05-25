@@ -40,10 +40,12 @@ int main(char *args)
 	
 	itoa(len,buff);
 
-	print("Generating key with lenth of ");
-	print(buff);
-	print("\n");
-	
+	printstr("Generating key with length of ");
+	printstr(buff);
+	printstr("\n");
+	char *buffer;	
+	keygen(len,buffer);
+	println(buffer);
 	
 	println(args);
 	_exit(0);

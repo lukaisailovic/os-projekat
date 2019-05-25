@@ -240,6 +240,94 @@ extern long user_key_ptr, user_shift_ptr, user_alt_ptr;
 extern int selected_layout, user_key_map_size;
 
 
+
+static void __reverse(char *buf, int len)
+{
+	int i, j;
+	char c;
+	for(i = 0, j = len - 1; i < j; ++i, --j)
+	{
+		c = buf[i];
+		buf[i] = buf[j];
+		buf[j] = c;
+	}
+}
+
+int itoa(int n, char *buf)
+{
+	int i = 0, sign;
+	if((sign = n) < 0)
+		n = -n;
+	do
+	{
+		buf[i++] = n % 10 + '0';
+	} while((n /= 10) > 0);
+
+	if(sign < 0)
+		buf[i++] = '-';
+	buf[i] = '\0';
+	__reverse(buf, i);
+	return i;
+}
+
+int r;
+int generate_random(int range_start, int range_end, int offset){
+	/* za random */
+	__asm__ __volatile__ (
+		"rdtsc;"
+		: "=a" (r)
+		:
+		: "%edx"
+	);
+	
+	__asm__ __volatile__ ( 
+		"movl (r), %%eax;"
+		"imull $7621, %%eax;"
+		"addl $1, %%eax;"
+		"movl $32768, %%ebx;"
+		"xorl %%edx, %%edx;"
+		"idivl %%ebx;"
+		"movl %%edx, (r);"
+		:
+		:
+		: "%eax", "%edx","%ebx","memory"
+	);
+	return ((r + offset) % (range_end - range_start)) + range_start;
+}
+
+int is_random_valid(const char *key,int key_length, int rand){
+	int i;
+	int valid = 1;
+	for(i = 0; i < key_length; i++){
+		if((*(key+i)) == rand){
+			valid = 0;
+			break;	
+		}
+	}
+	return valid;
+}
+
+int sys_keygen(int length, const char *buffer){
+	char key[17];
+	char tmp[1024];
+	int i, rand, j;
+	
+	for(i = 0; i < length; i++){						
+		while(1){
+			rand = generate_random(33,126,i);		
+			if(is_random_valid(&key,length,rand)){
+				
+				key[i] = rand;			
+				break;
+			} 		
+		}		
+	}
+	key[i+1] = 0;
+	printk(key);
+	printk("\n");
+}
+
+
 int sys_change_user_layout(const char *layout, int map)
 {
 	int i;
