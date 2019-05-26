@@ -274,11 +274,7 @@ extern int selected_layout, user_key_map_size;
 
 extern int sys_encr();
 
-int sys_encrypt(int fd){
-
-	printk("encrypting...\n");
-	return 0;
-}
+extern int sys_encrypt();
 
 
 int r;

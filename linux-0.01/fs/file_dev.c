@@ -14,6 +14,42 @@ int sys_encr(int fd){
 	return 0;
 }
 
+
+int buffer_encrypt(char *s, int len){
+	int i;
+	for(i = 0; i < len; i++){
+		s[i] = 'A';
+	}
+}
+
+int file_encrypt(struct m_inode *inode){
+	int nr, i= 0;
+	struct buffer_head *bh;
+	while(( nr = bmap(inode, i) )){
+		bh = bread(inode->i_dev,nr);
+		if(!bh) break;
+		buffer_encrypt(bh->b_data,1024);
+		bh->b_dirt = 1;
+		brelse(bh);
+		i++;
+	}
+}
+
+int sys_encrypt(int fd){
+
+	struct file *file;
+	struct m_inode *inode;
+	
+	if(fd >= NR_OPEN || !(file=current->filp[fd])){
+		return -EINVAL;
+	}
+	inode = file->f_inode;
+	file_encrypt(inode);
+	return 0;
+}
+
+
+
 int file_read(struct m_inode * inode, struct file * filp, char * buf, int count)
 {
 	int left,chars,nr;

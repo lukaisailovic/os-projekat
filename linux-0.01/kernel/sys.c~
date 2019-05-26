@@ -276,12 +276,6 @@ extern int sys_encr();
 
 int sys_encrypt(int fd){
 
-	 char buff[1024];
-	 itoa(fd,buff);
-	 
-	printk("fd:");
-	printk(buff);
-	printk("\n"); 
 	printk("encrypting...\n");
 	return 0;
 }
