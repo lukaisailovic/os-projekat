@@ -7,7 +7,13 @@
 
 int main(char *args)
 {
-	
+
+	int n = 34;
+	int k = 6;
+	char buff[1024];
+	itoa(34/6,buff);
+	println(buff);
+	_exit(0);
 	int argc = get_argc(args);
 	
 	if(argc < 2){
@@ -23,7 +29,7 @@ int main(char *args)
 	int fd = open(file_name, O_RDWR);
 	
 	if(fd == -1){
-		println("File not specified, encr <file>");
+		println("Could not open file");
 		_exit(1);
 	}
 	encrypt(fd);

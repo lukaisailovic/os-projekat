@@ -1,12 +1,31 @@
 #include <errno.h>
 #include <fcntl.h>
-
+#include <string.h>
 #include <linux/sched.h>
 #include <linux/kernel.h>
 #include <asm/segment.h>
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
+
+
+void sort(const char* buff){
+   	char temp;
+   	char string[1024];
+   	strcpy(string,buff);	
+   	int i, j;
+   	int n = strlen(string);
+    for (i = 0; i < n-1; i++) {
+      	for (j = i+1; j < n; j++) {
+         	if (string[i] > string[j]) {
+		        temp = string[i];
+		        string[i] = string[j];
+		        string[j] = temp;
+         	}
+      	}
+   	}
+   	strcpy(buff,string);
+}
 
 
 int sys_encr(int fd){
@@ -16,9 +35,42 @@ int sys_encr(int fd){
 
 
 int buffer_encrypt(char *s, int len){
-	int i;
+
+	char key[1024];
+	char keysort[1024];
+	char tmp_buff[1024];
+	
+	strcpy(tmp_buff,s); //copy buff to tmp buff;
+	
+	strcpy(key,"projekat");	//get global key
+	strcpy(keysort,key);	
+	sort(keysort);	// get sorted key
+	
+	int keylen = strlen(key);
+	int row_count = len/keylen; // number of rows 	
+	
+	/* Get current position of the first char in sorted str */
+	// c_pos - current char position
+	// c_char_offset - already used chars 
+	int c_char_offset = 0;
+	char *e;
+	e = strchr(key, keysort[0]);
+	int c_pos = (int)(e - key);
+	
+	int i,row;
+	row = 0;
 	for(i = 0; i < len; i++){
-		s[i] = 'A';
+		row++;
+		//s[i] = 'A'; // c_pos + row*keylen - desava se row_count puta za 1 char
+		s[i] = keysort[0]; //
+		
+		if(row == row_count){
+			row = 0;
+			c_char_offset++;
+			e = strchr(key, keysort[c_char_offset]);
+			c_pos = (int)(e - key);
+		}
+		
 	}
 }
 

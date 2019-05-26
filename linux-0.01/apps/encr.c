@@ -7,7 +7,6 @@
 
 int main(char *args)
 {
-	
 	int argc = get_argc(args);
 	
 	if(argc < 2){
