@@ -1,4 +1,5 @@
 #include <errno.h>
+#include <string.h>
 
 #include <linux/sched.h>
 #include <linux/tty.h>
@@ -235,10 +236,7 @@ int sys_null(int nr)
 	return -ENOSYS;
 }
 
-/* OS2019 */
-extern long user_key_ptr, user_shift_ptr, user_alt_ptr;
-extern int selected_layout, user_key_map_size;
-
+/* Utils */
 
 
 static void __reverse(char *buf, int len)
@@ -269,6 +267,12 @@ int itoa(int n, char *buf)
 	__reverse(buf, i);
 	return i;
 }
+
+/* OS2019 */
+extern long user_key_ptr, user_shift_ptr, user_alt_ptr;
+extern int selected_layout, user_key_map_size;
+
+
 
 int r;
 int generate_random(int range_start, int range_end, int offset){
@@ -309,14 +313,12 @@ int is_random_valid(const char *key,int key_length, int rand){
 
 int sys_keygen(int length, const char *buffer){
 	char key[17];
-	char tmp[1024];
-	int i, rand, j;
+	int i, rand;
 	
 	for(i = 0; i < length; i++){						
 		while(1){
 			rand = generate_random(33,126,i);		
-			if(is_random_valid(&key,length,rand)){
-				
+			if(is_random_valid(key,length,rand)){				
 				key[i] = rand;			
 				break;
 			} 		
@@ -325,6 +327,23 @@ int sys_keygen(int length, const char *buffer){
 	key[i+1] = 0;
 	printk(key);
 	printk("\n");
+	return 0;
+}
+
+char global_key[1024];
+
+int sys_keyset(int keylen,const char *key){
+	
+
+	
+	
+	//strcpy(&global_key,key);
+	strcpy(&global_key,"projekat");
+	printk("Global key is set to: ");
+	printk(global_key);
+	printk("\n");
+	return 0;
+	
 }
 
 
