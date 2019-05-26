@@ -272,6 +272,19 @@ int itoa(int n, char *buf)
 extern long user_key_ptr, user_shift_ptr, user_alt_ptr;
 extern int selected_layout, user_key_map_size;
 
+extern int sys_encr();
+
+int sys_encrypt(int fd){
+
+	 char buff[1024];
+	 itoa(fd,buff);
+	 
+	printk("fd:");
+	printk(buff);
+	printk("\n"); 
+	printk("encrypting...\n");
+	return 0;
+}
 
 
 int r;
@@ -343,7 +356,7 @@ int sys_keyset(int keylen,const char *key){
 
 int sys_keyclear(){
 	strcpy(&global_key,"");
-	printk("Global key cleared");
+	printk("Global key cleared\n");
 	return 0;
 }
 
@@ -353,6 +366,7 @@ int sys_keyshow(){
 	printk("\n");
 	return 0;
 }
+
 
 
 int sys_change_user_layout(const char *layout, int map)

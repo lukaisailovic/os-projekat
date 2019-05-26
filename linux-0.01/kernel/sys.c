@@ -272,6 +272,13 @@ int itoa(int n, char *buf)
 extern long user_key_ptr, user_shift_ptr, user_alt_ptr;
 extern int selected_layout, user_key_map_size;
 
+extern int sys_encr();
+
+int sys_encrypt(int fd){
+
+	printk("encrypting...\n");
+	return 0;
+}
 
 
 int r;
@@ -353,6 +360,7 @@ int sys_keyshow(){
 	printk("\n");
 	return 0;
 }
+
 
 
 int sys_change_user_layout(const char *layout, int map)

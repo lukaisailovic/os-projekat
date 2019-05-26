@@ -146,6 +146,8 @@
 #define __NR_keyset 74
 #define __NR_keyclear 75
 #define __NR_keyshow 76
+#define __NR_encr 77
+#define __NR_encrypt 78
 
 
 #define _syscall0(type,name) \
@@ -276,6 +278,8 @@ int keygen(int length,const char *buffer);
 int keyset(int length,const char *key);
 int keyclear(void);
 int keyshow(void);
+int encr(int fd);
+int encrypt(int fd);
 
 
 #define KEY_LAYOUT 0

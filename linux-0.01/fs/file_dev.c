@@ -8,6 +8,12 @@
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
+
+int sys_encr(int fd){
+	printk("Should encrypt file\n");
+	return 0;
+}
+
 int file_read(struct m_inode * inode, struct file * filp, char * buf, int count)
 {
 	int left,chars,nr;
