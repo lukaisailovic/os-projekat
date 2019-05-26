@@ -144,6 +144,8 @@
 
 #define __NR_keygen 73
 #define __NR_keyset 74
+#define __NR_keyclear 75
+#define __NR_keyshow 76
 
 
 #define _syscall0(type,name) \
@@ -272,6 +274,9 @@ int videowrite(const char *buffer, int len, struct videowrite_args *args);
 int clear(void);
 int keygen(int length,const char *buffer);
 int keyset(int length,const char *key);
+int keyclear(void);
+int keyshow(void);
+
 
 #define KEY_LAYOUT 0
 #define SHIFT_LAYOUT 1

@@ -83,6 +83,8 @@ extern int sys_change_user_layout();
 
 extern int sys_keygen();
 extern int sys_keyset();
+extern int sys_keyclear();
+extern int sys_keyshow();
 
 
 fn_ptr sys_call_table[] = { sys_setup, sys_exit, sys_fork, sys_read,
@@ -99,7 +101,7 @@ sys_oldolduname, sys_umask, sys_chroot, sys_ustat, sys_dup2, sys_getppid,
 sys_getpgrp,sys_setsid, sys_null /*67*/,sys_null,sys_null,
 
 /* 70 */sys_videowrite,sys_clear,sys_change_user_layout,sys_keygen,sys_keyset, /* 70 - videowrite, 71 - clear, 72 - change layout*/
-sys_null,sys_null,sys_null,sys_null,sys_null,
+sys_keyclear,sys_keyshow,sys_null,sys_null,sys_null,
 /* 80 */sys_null,sys_null,sys_null,sys_null,sys_null,
 sys_null,sys_null,sys_null,sys_null,sys_null,
 /* 90 */sys_null,sys_null,sys_null,sys_null,sys_null,
