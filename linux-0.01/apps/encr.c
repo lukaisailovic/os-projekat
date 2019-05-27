@@ -15,8 +15,8 @@ int main(char *args)
 	}
 
 	char *file_name = get_argv(args,1);
-	println("File name:");
-	println(file_name);
+	//println("File name:");
+	//println(file_name);
 	
 	
 	int fd = open(file_name, O_RDWR);

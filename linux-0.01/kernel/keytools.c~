@@ -1,10 +1,16 @@
-#include <stdarg.h>
-#include <stddef.h>
+#include <errno.h>
+#include <string.h>
 
+#include <linux/sched.h>
+#include <linux/tty.h>
 #include <linux/kernel.h>
-
+#include <asm/segment.h>
+#include <sys/times.h>
+#include <sys/utsname.h>
 
 /* Utils */
+
+
 
 
 static void __reverse(char *buf, int len)
@@ -34,6 +40,13 @@ int itoa(int n, char *buf)
 	buf[i] = '\0';
 	__reverse(buf, i);
 	return i;
+}
+
+void printint(int n){
+	char buff[1024];
+	itoa(n,buff);
+	printk(buff);
+	printk("\n");	
 }
 
 int r;

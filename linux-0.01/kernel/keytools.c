@@ -11,6 +11,8 @@
 /* Utils */
 
 
+
+
 static void __reverse(char *buf, int len)
 {
 	int i, j;
@@ -38,6 +40,13 @@ int itoa(int n, char *buf)
 	buf[i] = '\0';
 	__reverse(buf, i);
 	return i;
+}
+
+void printint(int n){
+	char buff[1024];
+	itoa(n,buff);
+	printk(buff);
+		
 }
 
 int r;
