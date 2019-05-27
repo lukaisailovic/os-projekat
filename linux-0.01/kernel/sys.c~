@@ -263,7 +263,7 @@ int sys_test(){
 	printk("test\n");
 }
 
-int testing = 1;
+int testing = 0;
 
 
 int sys_change_user_layout(const char *layout, int map)

@@ -73,9 +73,13 @@ int file_decrypt(struct m_inode *inode){
 	}
 }
 
+extern int is_file_encrypted();
+extern int decrypt_file();
+
+
 int sys_decrypt(int fd){
 	
-	if(!is_global_key_set() && testing 0){
+	if(!is_global_key_set() && testing == 0){
 		printk("Global key not set\n");
 		return 0;
 	}
@@ -88,7 +92,16 @@ int sys_decrypt(int fd){
 		return -EINVAL;
 	}
 	inode = file->f_inode;
-	file_decrypt(inode);
+	
+	if(!is_file_encrypted(inode->i_uid)){
+		printk("File is not encrypted\n");
+		return 0;
+	}
+	//file_decrypt(inode); // fn
+	decrypt_file(inode->i_num); // remove from list of encrypted files
+	
+	
+	
 	return 0;
 }
 

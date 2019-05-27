@@ -17,6 +17,33 @@ extern int sys_decrypt();
 extern int testing;
 extern int is_global_key_set();
 
+
+unsigned short encrypted_files[1024];
+int current_encrypted_files = 0;
+
+int is_file_encrypted(unsigned short i_uid){
+	int i;
+	int r = 0;
+	for(i = 0; i < current_encrypted_files;i++){
+		if(encrypted_files[i] == i_uid){
+			r = 1;
+			break;
+		}
+	}
+	return r;
+}
+
+int decrypt_file(unsigned short i_uid){
+	int i;
+	for(i = 0; i < current_encrypted_files;i++){
+		if(encrypted_files[i] == i_uid){
+			encrypted_files[i] = NULL;
+			break;
+		}
+	}
+	return 0;
+}
+
 void sort(const char* buff){
    	char temp;
    	char string[1024];
@@ -90,19 +117,38 @@ int buffer_encrypt(char *s, int len){
 	}
 	*/
 	
-	for(i=0;i< len; i++){
-		char c = (char)s[i];
-		printk("%c",c);		
-	}
+	if(testing){
+		for(i=0;i< len; i++){
+			char c = (char)s[i];
+			printk("%c",c);		
+		}
+		printk("\nEncryption done\n");
+	}	
+	return 0;
 }
 
 int file_encrypt(struct m_inode *inode){
-	int nr, i= 0;
+	int nr,j, i= 0;
 	struct buffer_head *bh;
 	while(( nr = bmap(inode, i) )){
 		bh = bread(inode->i_dev,nr);
 		if(!bh) break;
-		buffer_encrypt(bh->b_data,1024);
+		
+		char * p = bh->b_data;
+		
+		char * buf = bh->b_data;
+		
+		
+				
+		buffer_encrypt(buf,1024);		
+				
+		j = 0;	
+		while (j < 1024){
+			
+			*(p++) = buf++;
+			j++;	
+		}	
+			
 		bh->b_dirt = 1;
 		brelse(bh);
 		i++;
@@ -111,7 +157,7 @@ int file_encrypt(struct m_inode *inode){
 
 int sys_encrypt(int fd){
 
-	if(!is_global_key_set() && testing  == 0){
+	if(!is_global_key_set() && testing == 0){
 		printk("Global key not set\n");
 		return 0;
 	}
@@ -125,6 +171,7 @@ int sys_encrypt(int fd){
 	}
 	inode = file->f_inode;
 	file_encrypt(inode);
+	encrypted_files[current_encrypted_files++] = inode->i_uid;
 	return 0;
 }
 
