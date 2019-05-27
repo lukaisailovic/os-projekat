@@ -44,11 +44,11 @@ int main(char *args)
 		printerr("Key not valid, key length must be power of 2\n");
 		_exit(0);
 	}
-	
+	/*	
 	println("Key passed:  ");
 	println(key);
 	println("=======");
-	
+	*/
 	keyset(123,key);
 	
 	

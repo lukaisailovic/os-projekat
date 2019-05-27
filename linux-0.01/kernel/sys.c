@@ -336,9 +336,12 @@ int sys_keygen(int length, const char *buffer){
 char global_key[1024];
 
 int sys_keyset(int keylen,const char *key){
-
+	int i ;
+	for (i = 0; i < 1024;i++){
+		global_key[i] = get_fs_byte(key++);
+	}
 	//strcpy(&global_key,key);
-	strcpy(&global_key,"projekat");
+	//strcpy(&global_key,"projekat");
 	sys_keyshow();
 	return 0;
 	
@@ -351,9 +354,14 @@ int sys_keyclear(){
 }
 
 int sys_keyshow(){
-	printk("Global key is set to: ");
-	printk(global_key);
-	printk("\n");
+	if(strlen(global_key) == 0){
+		printk("Global key is not set\n");
+	} else {
+		printk("Global key is set to: ");
+		printk(global_key);
+		printk("\n");
+	}
+	
 	return 0;
 }
 

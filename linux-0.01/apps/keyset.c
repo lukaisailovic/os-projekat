@@ -49,7 +49,7 @@ int main(char *args)
 	println(key);
 	println("=======");
 	*/
-	keyset(123,key);
+	keyset(strlen(key),key);
 	
 	
 	
