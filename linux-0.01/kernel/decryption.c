@@ -98,7 +98,7 @@ int sys_decrypt(int fd){
 		return 0;
 	}
 	//file_decrypt(inode); // fn
-	decrypt_file(inode->i_num); // remove from list of encrypted files
+	remove_from_encrypted_list(inode->i_num);
 	
 	
 	

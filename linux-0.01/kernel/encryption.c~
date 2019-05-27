@@ -33,7 +33,7 @@ int is_file_encrypted(unsigned short i_uid){
 	return r;
 }
 
-int decrypt_file(unsigned short i_uid){
+int remove_from_encrypted_list(unsigned short i_uid){
 	int i;
 	for(i = 0; i < current_encrypted_files;i++){
 		if(encrypted_files[i] == i_uid){
@@ -117,13 +117,11 @@ int buffer_encrypt(char *s, int len){
 	}
 	*/
 	
-	if(testing){
-		for(i=0;i< len; i++){
+	for(i=0;i< len; i++){
 			char c = (char)s[i];
 			printk("%c",c);		
 		}
-		printk("\nEncryption done\n");
-	}	
+		printk("\nEncryption done\n");	
 	return 0;
 }
 
@@ -133,21 +131,15 @@ int file_encrypt(struct m_inode *inode){
 	while(( nr = bmap(inode, i) )){
 		bh = bread(inode->i_dev,nr);
 		if(!bh) break;
-		
-		char * p = bh->b_data;
-		
-		char * buf = bh->b_data;
-		
-		
-				
-		buffer_encrypt(buf,1024);		
-				
+		char * p = bh->b_data;						
+		buffer_encrypt(p,1024);		
+		/*		
 		j = 0;	
-		while (j < 1024){
-			
-			*(p++) = buf++;
+		while (j < 1024){			
+			*(p++) = buf[j];
 			j++;	
-		}	
+		}
+		*/	
 			
 		bh->b_dirt = 1;
 		brelse(bh);
@@ -171,7 +163,7 @@ int sys_encrypt(int fd){
 	}
 	inode = file->f_inode;
 	file_encrypt(inode);
-	encrypted_files[current_encrypted_files++] = inode->i_uid;
+	encrypted_files[current_encrypted_files++] = inode->i_num;
 	return 0;
 }
 
