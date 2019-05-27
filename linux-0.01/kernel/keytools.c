@@ -136,3 +136,13 @@ int sys_keyshow(){
 	
 	return 0;
 }
+
+
+int is_global_key_set(){
+	return strlen(global_key) > 0;
+}
+
+
+
+
+

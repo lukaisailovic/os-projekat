@@ -46,7 +46,7 @@ void printint(int n){
 	char buff[1024];
 	itoa(n,buff);
 	printk(buff);
-	printk("\n");	
+		
 }
 
 int r;

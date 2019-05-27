@@ -244,8 +244,6 @@ extern int selected_layout, user_key_map_size;
 
 extern int sys_encr();
 
-
-
 /* start keytools */
 extern int sys_keygen();
 extern int sys_keyclear();
@@ -257,7 +255,15 @@ extern int sys_keyset();
 extern int sys_encrypt();
 /* end encryption */
 
+/* start decryption */
+extern int sys_decrypt();
+/* end decryption */
 
+int sys_test(){
+	printk("test\n");
+}
+
+int testing = 1;
 
 
 int sys_change_user_layout(const char *layout, int map)

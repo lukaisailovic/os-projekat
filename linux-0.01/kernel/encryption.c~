@@ -13,6 +13,9 @@
 extern char global_key[1024];
 extern void printint();
 
+extern int sys_decrypt();
+extern int testing;
+extern int is_global_key_set();
 
 void sort(const char* buff){
    	char temp;
@@ -34,7 +37,7 @@ void sort(const char* buff){
 
 
 int sys_encr(int fd){
-	printk("Should encrypt file\n");
+	sys_decrypt(fd);
 	return 0;
 }
 
@@ -47,7 +50,11 @@ int buffer_encrypt(char *s, int len){
 	
 	strcpy(tmp_buff,s); //copy buff to tmp buff;
 	
-	strcpy(key,"projekat");	//get global key
+	if(testing){
+		strcpy(key,"projekat");
+	} else {
+		strcpy(key,global_key);	//get global key
+	}		
 	strcpy(keysort,key);	
 	sort(keysort);	// get sorted key
 		
@@ -60,7 +67,6 @@ int buffer_encrypt(char *s, int len){
 	int c_char_offset = 0;
 	char *e;
 	int c_pos;
-	
 
 	int i,j,n,row;
 	row = 0;
@@ -71,14 +77,23 @@ int buffer_encrypt(char *s, int len){
 		c_pos = (int)(e - key); // start position of the row
 			
 		for(j = 0; j < row_count; j++){ // loop - row_count (128 times) where j is row
-			
-			tmp_buff[n++] = s[c_pos + j*keylen];
-			
-				
-		
+			//char c = (char)s[c_pos + j*keylen];
+			//printk("%c",c);			
+			//tmp_buff[n++] = s[c_pos + j*keylen]; // c_pos - first char in column	
+			s[n++] = tmp_buff[c_pos + j*keylen];
 		}		
 	}
-	strcpy(s,tmp_buff);
+	/*
+	//strcpy(s,tmp_buff);
+	for(i=0;i< len; i++){
+		s[i] = tmp_buff[i];
+	}
+	*/
+	
+	for(i=0;i< len; i++){
+		char c = (char)s[i];
+		printk("%c",c);		
+	}
 }
 
 int file_encrypt(struct m_inode *inode){
@@ -96,6 +111,12 @@ int file_encrypt(struct m_inode *inode){
 
 int sys_encrypt(int fd){
 
+	if(!is_global_key_set() && testing  == 0){
+		printk("Global key not set\n");
+		return 0;
+	}
+
+	printk("Encrypting file\n");
 	struct file *file;
 	struct m_inode *inode;
 	

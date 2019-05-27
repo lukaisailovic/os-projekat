@@ -148,6 +148,8 @@
 #define __NR_keyshow 76
 #define __NR_encr 77
 #define __NR_encrypt 78
+#define __NR_decrypt 80
+#define __NR_test 81
 
 
 #define _syscall0(type,name) \
@@ -280,6 +282,8 @@ int keyclear(void);
 int keyshow(void);
 int encr(int fd);
 int encrypt(int fd);
+int decrypt(int fd);
+int test(void);
 
 
 #define KEY_LAYOUT 0

@@ -88,7 +88,9 @@ extern int sys_keyshow();
 
 extern int sys_encr();
 extern int sys_encrypt();
+extern int sys_decrypt();
 
+extern int sys_test();
 
 fn_ptr sys_call_table[] = { sys_setup, sys_exit, sys_fork, sys_read,
 sys_write, sys_open, sys_close, sys_waitpid, sys_creat, sys_link,
@@ -105,7 +107,7 @@ sys_getpgrp,sys_setsid, sys_null /*67*/,sys_null,sys_null,
 
 /* 70 */sys_videowrite,sys_clear,sys_change_user_layout,sys_keygen,sys_keyset, /* 70 - videowrite, 71 - clear, 72 - change layout*/
 sys_keyclear,sys_keyshow,sys_encr,sys_encrypt,sys_null,
-/* 80 */sys_null,sys_null,sys_null,sys_null,sys_null,
+/* 80 */sys_decrypt,sys_test,sys_null,sys_null,sys_null,
 sys_null,sys_null,sys_null,sys_null,sys_null,
 /* 90 */sys_null,sys_null,sys_null,sys_null,sys_null,
 sys_null,sys_null,sys_null,sys_null,sys_null,
