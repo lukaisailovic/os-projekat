@@ -12,6 +12,8 @@
 
 
 
+int secure_input_active = 0;
+
 
 static void __reverse(char *buf, int len)
 {
@@ -136,3 +138,13 @@ int sys_keyshow(){
 	
 	return 0;
 }
+
+
+int is_global_key_set(){
+	return strlen(global_key) > 0;
+}
+
+
+
+
+

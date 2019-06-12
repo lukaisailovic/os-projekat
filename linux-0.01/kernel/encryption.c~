@@ -16,16 +16,51 @@ extern void printint();
 extern int sys_decrypt();
 extern int testing;
 extern int is_global_key_set();
+extern int MurmurHash2();
 
+struct encrypted_file {
+	unsigned short i_num;
+	int key_hash;
+	int seed;
+};
 
-unsigned short encrypted_files[1024];
+struct encrypted_file encrypted_files[1024];
 int current_encrypted_files = 0;
+const int HASH_SEED = 12;
+
+int add_to_encrypted_list(unsigned short i_uid){
+	encrypted_files[current_encrypted_files++].i_num = i_uid;
+	int hash = MurmurHash2(global_key,strlen(global_key),12);
+	encrypted_files[current_encrypted_files].key_hash = hash;
+	printk("File added to encrypted list with key hash: %d \n",encrypted_files[current_encrypted_files].key_hash);
+	return 1;
+}
+
+int is_current_key_valid_for_file(unsigned short i_uid){
+	int hash = MurmurHash2(global_key,strlen(global_key),12);
+	int i;
+	int r = 0;
+	for(i = 0; i < current_encrypted_files+1;i++){
+		//printk("Comparing %d with %d \n",encrypted_files[i].key_hash,hash);
+		if(encrypted_files[i].i_num == i_uid){
+			printk("File found\n");
+			// file found in encrypted list			
+			if(encrypted_files[i].key_hash == hash){
+				r = 1;
+			}
+			printk("File key hash: %d\nCurrent key hash:%d\n",encrypted_files[i].key_hash,hash);			
+			break;
+		}
+		
+	}
+	return r;
+}
 
 int is_file_encrypted(unsigned short i_uid){
 	int i;
 	int r = 0;
-	for(i = 0; i < current_encrypted_files;i++){
-		if(encrypted_files[i] == i_uid){
+	for(i = 0; i < current_encrypted_files+1;i++){
+		if(encrypted_files[i].i_num == i_uid){
 			r = 1;
 			break;
 		}
@@ -35,9 +70,10 @@ int is_file_encrypted(unsigned short i_uid){
 
 int remove_from_encrypted_list(unsigned short i_uid){
 	int i;
+	struct encrypted_file null_struct = {0};
 	for(i = 0; i < current_encrypted_files;i++){
-		if(encrypted_files[i] == i_uid){
-			encrypted_files[i] = NULL;
+		if(encrypted_files[i].i_num == i_uid){
+			encrypted_files[i] = null_struct;
 			break;
 		}
 	}
@@ -116,12 +152,13 @@ int buffer_encrypt(char *s, int len){
 		s[i] = tmp_buff[i];
 	}
 	*/
-	
+	/*
 	for(i=0;i< len; i++){
 			char c = (char)s[i];
 			printk("%c",c);		
 		}
-		printk("\nEncryption done\n");	
+	*/	
+	
 	return 0;
 }
 
@@ -147,6 +184,7 @@ int file_encrypt(struct m_inode *inode){
 	}
 }
 
+
 int sys_encrypt(int fd){
 
 	if(!is_global_key_set() && testing == 0){
@@ -163,7 +201,12 @@ int sys_encrypt(int fd){
 	}
 	inode = file->f_inode;
 	file_encrypt(inode);
-	encrypted_files[current_encrypted_files++] = inode->i_num;
+	//encrypted_files[current_encrypted_files++] = inode->i_num;
+	add_to_encrypted_list(inode->i_num);
+	
+	
+	
+	printk("\nEncryption done\n");	
 	return 0;
 }
 

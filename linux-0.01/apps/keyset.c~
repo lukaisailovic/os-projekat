@@ -2,7 +2,7 @@
 #include <unistd.h>
 #define UTIL_IMPLEMENTATION
 #include "utils.h"
-
+#define MAX_KEYLEN 1024
 
 
 int is_power_of_two(int n)
@@ -23,10 +23,10 @@ int main(char *args)
 {
 
 	int argc,len;
-	char* key;
+	char key[MAX_KEYLEN];
 	char* buff;
 
-	
+	/*
 	argc = get_argc(args);
 	
 	if(argc < 2){
@@ -34,6 +34,12 @@ int main(char *args)
 		_exit(0);
 	}
 	key = get_argv(args,1);
+	*/
+	secureinput(1);
+	int user_key_len = read(0,key,MAX_KEYLEN);
+	key[user_key_len-1] = '\0';
+	secureinput(0);
+	
 	int keylen = strlen(key);
 	if(keylen > 1024){
 		printerr("Key length cannot be greater than 1024\n");
@@ -49,7 +55,7 @@ int main(char *args)
 	println(key);
 	println("=======");
 	*/
-	keyset(123,key);
+	keyset(strlen(key),key);
 	
 	
 	

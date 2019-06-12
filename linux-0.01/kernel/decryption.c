@@ -49,7 +49,7 @@ int buffer_decrypt(char *s, int len){
 	n = 0;
 	for(i = 0; i < keylen; i++){	// loop - keylen (8 times) where i is c_char_offset
 		
-		e = strchr(key, keysort[i]);
+		e = strchr(keysort, key[i]);
 		c_pos = (int)(e - key); // start position of the row
 			
 		for(j = 0; j < row_count; j++){ // loop - row_count (128 times) where j is row
@@ -84,7 +84,7 @@ int sys_decrypt(int fd){
 		return 0;
 	}
 	
-	printk("Decrypting file...\n");
+	
 	struct file *file;
 	struct m_inode *inode;
 	
@@ -97,9 +97,14 @@ int sys_decrypt(int fd){
 		printk("File is not encrypted\n");
 		return 0;
 	}
-	//file_decrypt(inode); // fn
-	remove_from_encrypted_list(inode->i_num);
 	
+	if(!is_current_key_valid_for_file(inode->i_num)){
+		printk("File is not encrypted with current key\n");
+		return 0;
+	}
+	file_decrypt(inode); // fn
+	remove_from_encrypted_list(inode->i_num);
+	printk("File decrypted...\n");
 	
 	
 	return 0;

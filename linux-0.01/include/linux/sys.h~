@@ -85,10 +85,14 @@ extern int sys_keygen();
 extern int sys_keyset();
 extern int sys_keyclear();
 extern int sys_keyshow();
+extern int sys_secureinput();
+
 
 extern int sys_encr();
 extern int sys_encrypt();
 extern int sys_decrypt();
+
+extern int sys_test();
 
 fn_ptr sys_call_table[] = { sys_setup, sys_exit, sys_fork, sys_read,
 sys_write, sys_open, sys_close, sys_waitpid, sys_creat, sys_link,

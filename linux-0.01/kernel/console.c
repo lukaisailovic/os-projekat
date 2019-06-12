@@ -388,6 +388,8 @@ static void restore_cur(void)
 	pos=origin+((y*columns+x)<<1);
 }
 
+extern int secure_input_active;
+
 void con_write(struct tty_struct * tty)
 {
 	int nr;
@@ -403,6 +405,9 @@ void con_write(struct tty_struct * tty)
 						x -= columns;
 						pos -= columns<<1;
 						lf();
+					}
+					if(secure_input_active){
+						break;
 					}
 					__asm__("movb attr,%%ah\n\t"
 						"movw %%ax,%1\n\t"

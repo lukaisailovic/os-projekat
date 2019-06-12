@@ -149,7 +149,8 @@
 #define __NR_encr 77
 #define __NR_encrypt 78
 #define __NR_decrypt 80
-#define __NR_test 80
+#define __NR_test 81
+#define __NR_secureinput 82
 
 
 #define _syscall0(type,name) \

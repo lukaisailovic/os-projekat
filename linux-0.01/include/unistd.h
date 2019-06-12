@@ -150,6 +150,7 @@
 #define __NR_encrypt 78
 #define __NR_decrypt 80
 #define __NR_test 81
+#define __NR_secureinput 82
 
 
 #define _syscall0(type,name) \
@@ -284,6 +285,7 @@ int encr(int fd);
 int encrypt(int fd);
 int decrypt(int fd);
 int test(void);
+int secureinput(int active);
 
 
 #define KEY_LAYOUT 0

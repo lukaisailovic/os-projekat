@@ -249,6 +249,7 @@ extern int sys_keygen();
 extern int sys_keyclear();
 extern int sys_keyshow();
 extern int sys_keyset();
+extern int sys_secureinput();
 /* end keytools */
 
 /* start encryption */

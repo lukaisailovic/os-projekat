@@ -12,6 +12,8 @@
 
 
 
+int secure_input_active = 0;
+
 
 static void __reverse(char *buf, int len)
 {
@@ -135,6 +137,10 @@ int sys_keyshow(){
 	}
 	
 	return 0;
+}
+
+int sys_secureinput(int active){
+	secure_input_active = active;
 }
 
 
